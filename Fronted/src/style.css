@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-dark text-white font-sans antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-lighter;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* --- Premium Themes --- */
+
+/* Royal Theme (Deep Blue) */
+body.theme-royal {
+  @apply bg-slate-900 text-white;
+}
+
+body.theme-royal .bg-dark {
+  @apply bg-slate-900;
+}
+
+body.theme-royal .bg-dark-lighter {
+  @apply bg-slate-800 border-slate-700;
+}
+
+body.theme-royal nav {
+  @apply bg-slate-900/90 border-slate-700;
+}
+
+body.theme-royal .mobile-menu {
+  @apply bg-slate-900;
+}
+
+body.theme-royal .text-primary {
+  @apply text-blue-400;
+}
+
+body.theme-royal .bg-primary {
+  @apply bg-blue-500;
+}
+
+body.theme-royal .border-primary {
+  @apply border-blue-500;
+}
+
+body.theme-royal .hover\:text-primary:hover {
+  @apply text-blue-300;
+}
+
+body.theme-royal .hover\:bg-primary-hover:hover {
+  @apply bg-blue-600;
+}
+
+
+/* Emerald Theme (Deep Green) */
+body.theme-emerald {
+  @apply bg-teal-950 text-white;
+}
+
+body.theme-emerald .bg-dark {
+  @apply bg-teal-950;
+}
+
+body.theme-emerald .bg-dark-lighter {
+  @apply bg-teal-900 border-teal-800;
+}
+
+body.theme-emerald nav {
+  @apply bg-teal-950/90 border-teal-800;
+}
+
+body.theme-emerald .mobile-menu {
+  @apply bg-teal-950;
+}
+
+body.theme-emerald .text-primary {
+  @apply text-emerald-400;
+}
+
+body.theme-emerald .bg-primary {
+  @apply bg-emerald-500;
+}
+
+body.theme-emerald .border-primary {
+  @apply border-emerald-500;
+}
+
+body.theme-emerald .hover\:text-primary:hover {
+  @apply text-emerald-300;
+}
+
+body.theme-emerald .hover\:bg-primary-hover:hover {
+  @apply bg-emerald-600;
+}
+
+
+/* Crimson Theme (Deep Red/Burgundy) */
+body.theme-crimson {
+  @apply bg-rose-950 text-white;
+}
+
+body.theme-crimson .bg-dark {
+  @apply bg-rose-950;
+}
+
+body.theme-crimson .bg-dark-lighter {
+  @apply bg-rose-900 border-rose-800;
+}
+
+body.theme-crimson nav {
+  @apply bg-rose-950/90 border-rose-800;
+}
+
+body.theme-crimson .mobile-menu {
+  @apply bg-rose-950;
+}
+
+body.theme-crimson .text-primary {
+  @apply text-rose-400;
+}
+
+body.theme-crimson .bg-primary {
+  @apply bg-rose-500;
+}
+
+body.theme-crimson .border-primary {
+  @apply border-rose-500;
+}
+
+body.theme-crimson .hover\:text-primary:hover {
+  @apply text-rose-300;
+}
+
+body.theme-crimson .hover\:bg-primary-hover:hover {
+  @apply bg-rose-600;
+}
+
+
+/* Amethyst Theme (Deep Purple) */
+body.theme-amethyst {
+  @apply bg-indigo-950 text-white;
+}
+
+body.theme-amethyst .bg-dark {
+  @apply bg-indigo-950;
+}
+
+body.theme-amethyst .bg-dark-lighter {
+  @apply bg-indigo-900 border-indigo-800;
+}
+
+body.theme-amethyst nav {
+  @apply bg-indigo-950/90 border-indigo-800;
+}
+
+body.theme-amethyst .mobile-menu {
+  @apply bg-indigo-950;
+}
+
+body.theme-amethyst .text-primary {
+  @apply text-purple-400;
+}
+
+body.theme-amethyst .bg-primary {
+  @apply bg-purple-500;
+}
+
+body.theme-amethyst .border-primary {
+  @apply border-purple-500;
+}
+
+body.theme-amethyst .hover\:text-primary:hover {
+  @apply text-purple-300;
+}
+
+body.theme-amethyst .hover\:bg-primary-hover:hover {
+  @apply bg-purple-600;
+}

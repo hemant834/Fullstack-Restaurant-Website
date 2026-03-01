@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark/Light Mode Toggle</title>
+    <style>
+        /* 
+           CSS Variables for easy theme management 
+           Default is Light Mode
+        */
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333333;
+            --container-bg: #ffffff;
+            --button-bg: #e0e0e0;
+            --button-text: #333333;
+            --accent-color: #007bff;
+        }
+
+        /* Dark Mode overrides */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --container-bg: #1e1e1e;
+            --button-bg: #333333;
+            --button-text: #ffffff;
+            --accent-color: #4da3ff;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Smooth transition for theme switching */
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Main Container Card */
+        .container {
+            background-color: var(--container-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Toggle Button Styles */
+        #theme-toggle {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s ease, background-color 0.4s ease, color 0.4s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        #theme-toggle:active {
+            transform: scale(0.95); /* Click effect */
+        }
+
+        /* Icon styling */
+        .icon {
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Theme Switcher</h1>
+        <p>This is a simple demonstration of a Dark/Light mode toggle. Your preference is saved automatically!</p>
+        
+        <!-- The Toggle Button -->
+        <button id="theme-toggle" aria-label="Toggle Dark Mode">
+            <span id="theme-icon" class="icon">☀️</span>
+            <span id="theme-text">Light Mode</span>
+        </button>
+    </div>
+
+    <script>
+        // Select the button and its elements
+        const toggleButton = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+        const body = document.body;
+
+        // Icons for the two modes
+        const sunIcon = '☀️';
+        const moonIcon = '🌙';
+
+        /**
+         * Function to set the theme explicitly
+         * @param {boolean} isDark - true if dark mode, false if light mode
+         */
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                themeIcon.textContent = moonIcon;
+                themeText.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                themeIcon.textContent = sunIcon;
+                themeText.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        /**
+         * Check Local Storage on page load
+         * If 'theme' is 'dark', apply dark mode immediately
+         */
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            applyTheme(true);
+        }
+
+        /**
+         * Event Listener for Button Click
+         * Toggles the theme class and saves preference
+         */
+        toggleButton.addEventListener('click', () => {
+            const isDarkMode = body.classList.contains('dark-mode');
+            // If currently dark, switch to light (false), otherwise switch to dark (true)
+            applyTheme(!isDarkMode);
+        });
+    </script>
+
+</body>
+</html>
