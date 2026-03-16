@@ -48,7 +48,17 @@ function validateAddress() {
   return isValid
 }
 
-function handleCheckout() {
+const loadRazorpay = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+}
+
+async function handleCheckout() {
   if (cartStore.items.length === 0) return
 
   // Validate if Home Delivery
@@ -61,37 +71,102 @@ function handleCheckout() {
     }
   }
 
-  // Construct Payload
-  const orderPayload = {
-    items: cartStore.items.map(item => ({
-      id: item.id,
-      name: item.name,
-      quantity: item.quantity,
-      price: item.price
-    })),
-    totalAmount: cartStore.totalPrice,
-    isUnlimitedPlan: cartStore.isUnlimitedPlan,
-    deliveryType: deliveryType.value,
-    shippingAddress: deliveryType.value === 'home-delivery' ? { ...address } : null,
-    orderDate: new Date().toISOString()
+  const res = await loadRazorpay()
+
+  if (!res) {
+    alert('Razorpay SDK failed to load. Are you online?')
+    return
   }
 
-  // Log Payload (Mock Backend Send)
-  console.log('🚀 Submitting Order:', orderPayload)
+  const deliveryFee = deliveryType.value === 'home-delivery' ? 80 : 0
+  const amountToPay = cartStore.totalPrice + deliveryFee
 
-  // Update stats
-  userStore.addOrder(cartStore.totalItems)
+  try {
+    // 1. Create order on your backend
+    const orderData = await fetch('http://127.0.0.1:8000/api/payment/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        amount: amountToPay,
+        currency: 'INR'
+      })
+    }).then((t) => t.json())
 
-  const successMessage = deliveryType.value === 'home-delivery'
-    ? 'Order placed! Your food is on the way.'
-    : 'Order placed! Please wait at your table.'
+    if (!orderData.success) {
+      alert('Failed to create order on server')
+      return
+    }
 
-  alert(successMessage)
+    // 2. Initialize Razorpay Checkout
+    const options = {
+      key: 'rzp_test_RhAm1mwY2iFNYf', // Your Razorpay Key ID
+      amount: orderData.order.amount,
+      currency: orderData.order.currency,
+      name: 'Secret Garden',
+      description: 'Food Ordering Transaction',
+      order_id: orderData.order.id,
+      handler: async function (response) {
+        // 3. Verify Payment
+        const verifyData = await fetch('http://127.0.0.1:8000/api/payment/verify-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+            amount: amountToPay,
+            delivery_type: deliveryType.value,
+            address: deliveryType.value === 'home-delivery' ? `${address.street}, ${address.city}, ${address.pincode} ${address.landmark ? '('+address.landmark+')' : ''}` : null,
+            items: JSON.stringify(cartStore.items)
+          })
+        }).then((t) => t.json())
 
-  // Reset cart
-  cartStore.items = []
+        if (verifyData.success) {
+          userStore.addOrder(cartStore.totalItems)
 
-  router.push('/profile')
+          const successMessage = deliveryType.value === 'home-delivery'
+            ? 'Payment Successful! Your food is on the way.'
+            : 'Payment Successful! Please wait at your table.'
+
+          // Save to recent orders in browser
+          const recentOrders = JSON.parse(localStorage.getItem('recent_orders') || '[]')
+          recentOrders.unshift({
+            id: response.razorpay_order_id,
+            date: new Date().toLocaleString(),
+            items: cartStore.items.map(i => `${i.quantity}x ${i.name}`).join(', '),
+            amount: amountToPay,
+            deliveryType: deliveryType.value
+          })
+          localStorage.setItem('recent_orders', JSON.stringify(recentOrders))
+
+          // Reset cart
+          cartStore.items = []
+          localStorage.setItem('latestOrderId', response.razorpay_order_id)
+          router.push(`/track/${response.razorpay_order_id}`)
+        } else {
+          alert('Payment verification failed!')
+        }
+      },
+      prefill: {
+        name: userStore.user?.name || 'Customer',
+        email: userStore.user?.email || 'customer@example.com',
+        contact: '9999999999'
+      },
+      theme: {
+        color: '#f59e0b' // Matches primary color
+      }
+    }
+
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
+  } catch (err) {
+    console.error(err)
+    alert('Something went wrong!')
+  }
 }
 </script>
 
@@ -312,7 +387,7 @@ function handleCheckout() {
 
               <div class="flex justify-between items-center">
                 <span class="text-xl font-bold text-white">Total</span>
-                <span class="text-2xl font-bold text-primary">₹{{ cartStore.totalPrice }}</span>
+                <span class="text-2xl font-bold text-primary">₹{{ cartStore.totalPrice + (deliveryType === 'home-delivery' ? 80 : 0) }}</span>
               </div>
             </div>
 

@@ -8,7 +8,7 @@ import Profile from '../pages/Profile.vue'
 import UnlimitedBuffet from '../pages/UnlimitedBuffet.vue'
 import FreshFast from '../pages/FreshFast.vue'
 import QualityAssured from '../pages/QualityAssured.vue'
-
+import TrackOrder from '../pages/TrackOrder.vue'
 
 const routes = [
     { path: '/', name: 'Home', component: Home, meta: { requiresAuth: true } },
@@ -17,6 +17,7 @@ const routes = [
     { path: '/booking', name: 'Booking', component: Booking, meta: { requiresAuth: true } },
     { path: '/profile', name: 'Profile', component: Profile },
     { path: '/register', name: 'Register', component: Register },
+    { path: '/track/:orderId?', name: 'TrackOrder', component: TrackOrder, meta: { requiresAuth: true } },
     { path: '/unlimited-buffet', name: 'UnlimitedBuffet', component: UnlimitedBuffet, meta: { requiresAuth: true } },
     { path: '/fresh-fast', name: 'FreshFast', component: FreshFast, meta: { requiresAuth: true } },
     { path: '/quality-assured', name: 'QualityAssured', component: QualityAssured, meta: { requiresAuth: true } },

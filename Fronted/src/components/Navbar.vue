@@ -108,8 +108,8 @@ function toggleMobileMenu() {
       <div class="hidden md:flex items-center space-x-8">
         <RouterLink to="/" class="text-white hover:text-primary transition-colors font-medium">Home</RouterLink>
         <RouterLink to="/menu" class="text-white hover:text-primary transition-colors font-medium">Menu</RouterLink>
-        <RouterLink to="/booking" class="text-white hover:text-primary transition-colors font-medium">Book Table
-        </RouterLink>
+        <RouterLink to="/booking" class="text-white hover:text-primary transition-colors font-medium">Book Table</RouterLink>
+        <RouterLink to="/track" class="text-white hover:text-primary transition-colors font-medium">Track Order</RouterLink>
 
         <!-- Cart -->
         <RouterLink to="/cart" class="relative group">
@@ -199,6 +199,9 @@ function toggleMobileMenu() {
         <RouterLink to="/booking"
           class="text-white hover:text-primary transition-colors font-medium py-2 text-lg border-b border-gray-800"
           @click="isMobileMenuOpen = false">Book Table</RouterLink>
+        <RouterLink to="/track"
+          class="text-white hover:text-primary transition-colors font-medium py-2 text-lg border-b border-gray-800"
+          @click="isMobileMenuOpen = false">Track Order</RouterLink>
         <RouterLink to="/cart"
           class="text-white hover:text-primary transition-colors font-medium py-2 flex items-center justify-between border-b border-gray-800"
           @click="isMobileMenuOpen = false">
